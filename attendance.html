@@ -1,0 +1,170 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Attendance Management System</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 80%;
+            margin: auto;
+            margin-top: 40px;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0,0,0,0.2);
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        input {
+            width: 70%;
+            padding: 10px;
+            margin: 10px 0;
+        }
+
+        button {
+            padding: 10px 20px;
+            background: blue;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        button:hover {
+            background: darkblue;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        table, th, td {
+            border: 1px solid #ccc;
+        }
+
+        th {
+            background: #007bff;
+            color: white;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: center;
+        }
+
+        .present {
+            color: green;
+            font-weight: bold;
+        }
+
+        .absent {
+            color: red;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+    <h1>Attendance Management System</h1>
+
+    <input type="text" id="studentName" placeholder="Enter Student Name">
+    <button onclick="addStudent()">Add Student</button>
+
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Student Name</th>
+                <th>Status</th>
+                <th>Date</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+
+        <tbody id="studentTable">
+        </tbody>
+    </table>
+</div>
+
+<script>
+    let students = [];
+    let count = 1;
+
+    function addStudent() {
+        const name = document.getElementById('studentName').value;
+
+        if (name === '') {
+            alert('Please enter student name');
+            return;
+        }
+
+        const today = new Date().toLocaleDateString();
+
+        const student = {
+            id: count,
+            name: name,
+            status: 'Present',
+            date: today
+        };
+
+        students.push(student);
+        count++;
+
+        displayStudents();
+
+        document.getElementById('studentName').value = '';
+    }
+
+    function displayStudents() {
+        const table = document.getElementById('studentTable');
+
+        table.innerHTML = '';
+
+        students.forEach((student, index) => {
+            table.innerHTML += `
+                <tr>
+                    <td>${student.id}</td>
+                    <td>${student.name}</td>
+                    <td class="${student.status === 'Present' ? 'present' : 'absent'}">
+                        ${student.status}
+                    </td>
+                    <td>${student.date}</td>
+                    <td>
+                        <button onclick="toggleAttendance(${index})">
+                            Toggle
+                        </button>
+                    </td>
+                </tr>
+            `;
+        });
+    }
+
+    function toggleAttendance(index) {
+        if (students[index].status === 'Present') {
+            students[index].status = 'Absent';
+        } else {
+            students[index].status = 'Present';
+        }
+
+        displayStudents();
+    }
+</script>
+
+</body>
+</html>
